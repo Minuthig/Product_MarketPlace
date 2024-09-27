@@ -31,7 +31,7 @@ Represents an item being sold. Each product could have attributes like:
      - Sorting products based on ratings or price.
 
 
-## User Sories
+## User Stories
 There are two types of users for this platform.
 -	Customers
 -	Producers
