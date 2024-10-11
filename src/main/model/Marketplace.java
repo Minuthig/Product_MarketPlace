@@ -32,4 +32,15 @@ public class Marketplace {
         return new ArrayList<>(products);
     }
 
+    // EFFECTS: Searches for the name entered and returns a list of products matching the name
+    public List<Product> searchByName(String name) {
+        List<Product> result = new ArrayList<>();
+        for (Product p : products) {
+            if (p.getName().toLowerCase().contains(name.toLowerCase())) {
+                result.add(p);
+            }
+        }
+        return result;
+    }
+
 }
