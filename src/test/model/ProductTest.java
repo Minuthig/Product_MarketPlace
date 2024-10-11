@@ -36,7 +36,7 @@ public class ProductTest {
 
     @Test
     void testToString() {
-        assertTrue( testProduct.toString().contains("Product: Laptop, Description: HP x360 Spectre, Price: $1699.99, Category: electronics, Producer: HP"));
+        assertTrue( testProduct.toString().contains("Product: Laptop, Description: HP x360 Spectre, Price: $1999.99, Category: electronics, Producer: HP"));
     }
 
 

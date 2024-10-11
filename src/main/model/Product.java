@@ -51,7 +51,10 @@ public class Product {
 
     // REQUIRES: price must be >= 0.0
     public void setPrice(double price) {
-        this.price = price;
+        if (price >= 0.0) {
+            this.price = price;
+        }
+            
     }
 
     public String getProducerName() {
