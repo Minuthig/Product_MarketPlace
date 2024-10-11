@@ -2,7 +2,6 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
-import model.*;
 
 
 // Represents a list of products displayed by several producers.
@@ -10,7 +9,7 @@ public class Marketplace {
     private List<Product> products;
 
     // EFFECTS: initializes an empty list of products
-    public marketplace(){
+    public void marketplace() {
         this.products = new ArrayList<>();
     }
 
@@ -28,5 +27,9 @@ public class Marketplace {
         this.products.remove(product);
     }
 
-    
+    // EFFECTS: Gets the list of all products.
+    public List<Product> getAllProducts() {
+        return new ArrayList<>(products);
+    }
+
 }
