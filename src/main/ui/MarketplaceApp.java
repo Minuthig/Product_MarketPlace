@@ -97,7 +97,7 @@ public class MarketplaceApp {
         
         if (!productsFound.isEmpty()) {
             Product productToRemove = productsFound.get(0);
-            marketplace.removeProduct(productToRemove.getName()); // Remove by name
+            marketplace.removeProduct(productToRemove); 
             System.out.println("Product removed successfully.");
         } else {
             System.out.println("Product not found.");
