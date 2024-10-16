@@ -9,7 +9,7 @@ public class Marketplace {
     private List<Product> products;
 
     // EFFECTS: initializes an empty list of products
-    public void marketplace() {
+    public Marketplace() {
         this.products = new ArrayList<>();
     }
 
