@@ -21,6 +21,7 @@ public class MarketplaceTest {
         laptop = new Product("Laptop", "HP x360 Spectre", "electronics", 1999.99, "HP");
         dress = new Product("Dress", "Blue,formal,knee-length, A-line dress", "clothing", 40.00, "Aritzia");
         lipstick = new Product("Lipstick", "Red, 426, Raisin Rage", "cosmetics", 20.99, "Revlon");
+        
     }
 
     @Test
@@ -51,4 +52,35 @@ public class MarketplaceTest {
         assertTrue(products.contains(dress));
     }
 
+    @Test
+    void testSearchByName() {
+        testMarketplace.addProduct(laptop);
+        testMarketplace.addProduct(dress);
+        testMarketplace.addProduct(lipstick);
+
+        List<Product> products = testMarketplace.getAllProducts();
+
+        assertTrue(products.contains(laptop));
+        assertTrue(products.contains(dress));
+        assertTrue(products.contains(lipstick));
+
+        List<Product> searchResults = testMarketplace.searchByName("Laptop");
+        assertEquals(1, searchResults.size());
+        assertEquals("Laptop", searchResults.get(0).getName());
+    }
+    
+    @Test
+    void testSearchByNameNoMatch(){
+        testMarketplace.addProduct(laptop);
+        testMarketplace.addProduct(dress);
+
+        List<Product> products = testMarketplace.getAllProducts();
+
+        assertFalse(products.contains(lipstick));
+
+    }
+
+
+
 }
+

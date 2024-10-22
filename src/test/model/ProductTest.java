@@ -35,6 +35,23 @@ public class ProductTest {
     }
 
     @Test
+    void testSetters() {
+        testProduct.setName("Gaming Laptop");
+        assertEquals("Gaming Laptop", testProduct.getName());
+
+        testProduct.setDescription("Gaming Laptop for all ages");
+        assertEquals("Gaming Laptop for all ages", testProduct.getDescription());
+
+        testProduct.setCategory("Gaming");
+        assertEquals("Gaming", testProduct.getCategory());
+
+        testProduct.setProducerName("ASUS");
+        assertEquals("ASUS", testProduct.getProducerName());
+
+    }
+
+
+    @Test
     void testToString() {
         assertTrue( testProduct.toString().contains("Product: Laptop, Description: HP x360 Spectre, Price: $1999.99, Category: electronics, Producer: HP"));
     }
