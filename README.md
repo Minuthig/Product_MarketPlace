@@ -38,7 +38,6 @@ There are two types of users for this platform.
 
 In a *customer's* point of view;
 - I want to be able to view a list of all products available in the marketplace, including their name, price, and category so I can browse for items to purchase.
-- I want to be able to add a product to my wishlist so I can save items I’m interested in purchasing later.
 - I want to be able to submit a review for a product and specify a rating and a comment, so that others can see my feedback and make informed decisions.
 
 - I want to be able to save the entire state of the marketplace, including all products, reviews, and wishlists, to a file, so I can resume from where I left off later.
