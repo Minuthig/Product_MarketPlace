@@ -1,0 +1,20 @@
+{
+    "products": [
+        {
+            "name": "Laptop",
+            "description": "High-end gaming laptop",
+            "category": "Electronics",
+            "price": 1200.0,
+            "producerName": "TechCo",
+            "reviews": []
+        },
+        {
+            "name": "Chair",
+            "description": "Comfortable office chair",
+            "category": "Furniture",
+            "price": 150.0,
+            "producerName": "FurniCo",
+            "reviews": []
+        }
+    ]
+}

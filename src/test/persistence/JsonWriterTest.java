@@ -1,8 +1,6 @@
 package persistence;
 
 import model.Product;
-import persistence.JsonReader;
-import persistence.JsonWriter;
 import model.Marketplace;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +18,7 @@ class JsonWriterTest extends JsonTest {
             writer.open();
             fail("IOException was expected");
         } catch (IOException e) {
+            // pass
         }
     }
 
@@ -64,11 +63,10 @@ class JsonWriterTest extends JsonTest {
     }
 
     // Helper method to check that the product matches expected values
-    private void checkProduct(String name, String description, String category, double price, String producer,
-            Product product) {
-        assertEquals(name, product.getName());
-        assertEquals(description, product.getDescription());
-        assertEquals(category, product.getCategory());
+    protected void checkProduct(String n, String d, String c, double price, String producer, Product product) {
+        assertEquals(n, product.getName());
+        assertEquals(d, product.getDescription());
+        assertEquals(c, product.getCategory());
         assertEquals(price, product.getPrice());
         assertEquals(producer, product.getProducerName());
     }
