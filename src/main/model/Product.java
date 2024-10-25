@@ -1,5 +1,8 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // Represents a Product with a name, description, category, price and producer name
 public class Product {
     private String name; // name of the product
@@ -7,6 +10,7 @@ public class Product {
     private String category; // the category (Eg: Clothing, Electronics, Furniture) of the product
     private double price; // the price of the product
     private String producerName; // the name of the producer of the product
+    private List<Review> reviews;
 
     // REQUIRES: The name, description, category and producer name of the product
     // must not be empty,
@@ -19,6 +23,7 @@ public class Product {
         this.category = category;
         this.price = price;
         this.producerName = producerName;
+        this.reviews = new ArrayList<>();
     }
 
     public String getName() {
@@ -53,9 +58,7 @@ public class Product {
     public void setPrice(double price) {
         if (price >= 0.0) {
             this.price = price;
-
-        }
-            
+        }     
     }
 
     public String getProducerName() {
@@ -65,6 +68,24 @@ public class Product {
     public void setProducerName(String producerName) {
         this.producerName = producerName;
     }
+
+    // REQUIRES: rating >= 1 && rating <= 5
+    // MODIFIES: this
+    // EFFECTS: adds a review to the product
+    public void addReview(int rating, String comment) {
+        reviews.add(new Review(rating, comment));
+    }
+
+
+     // EFFECTS: returns the number of reviews
+    public int getReviewCount() {
+        return reviews.size();
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
 
     /*
      * EFFECTS: returns a string representation of product

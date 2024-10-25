@@ -50,6 +50,25 @@ public class ProductTest {
 
     }
 
+    @Test
+    void testAddReviewValid() {
+        testProduct.addReview(5, "Excellent!");
+        assertEquals(1, testProduct.getReviewCount());
+        assertEquals(5, testProduct.getReviews().get(0).getRating());
+        assertEquals("Excellent!", testProduct.getReviews().get(0).getComment());
+    }
+
+    @Test
+    void testAddMultipleReviews() {
+        testProduct.addReview(4, "Very good");
+        testProduct.addReview(3, "Average");
+        assertEquals(2, testProduct.getReviewCount());
+        assertEquals(4, testProduct.getReviews().get(0).getRating());
+        assertEquals("Very good", testProduct.getReviews().get(0).getComment());
+        assertEquals(3, testProduct.getReviews().get(1).getRating());
+        assertEquals("Average", testProduct.getReviews().get(1).getComment());
+    }
+
 
     @Test
     void testToString() {
