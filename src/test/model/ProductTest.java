@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
 public class ProductTest {
     private Product testProduct;
 
@@ -69,11 +68,10 @@ public class ProductTest {
         assertEquals("Average", testProduct.getReviews().get(1).getComment());
     }
 
-
     @Test
     void testToString() {
-        assertTrue( testProduct.toString().contains("Product: Laptop, Description: HP x360 Spectre, Price: $1999.99, Category: electronics, Producer: HP"));
+        assertTrue(testProduct.toString().contains(
+                "Product: Laptop, Description: HP x360 Spectre, Price: $1999.99, Category: electronics, Producer: HP"));
     }
-
 
 }

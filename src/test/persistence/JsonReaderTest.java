@@ -1,7 +1,7 @@
-package persistancee;
+package persistence;
 
 import model.Product;
-import persistancee.JsonReader;
+import persistence.JsonReader;
 import model.Marketplace;
 import org.junit.jupiter.api.Test;
 import org.json.JSONObject;
@@ -22,14 +22,25 @@ class JsonReaderTest extends JsonTest {
         }
     }
 
+    // @Test
+    // void testReaderEmptyMarketplace() {
+    // JsonReader reader = new JsonReader("./data/testReaderEmptyMarketplace.json");
+    // try {
+    // Marketplace marketplace = reader.read();
+    // assertEquals(0, marketplace.getAllProducts().size());
+    // } catch (IOException e) {
+    // fail("Couldn't read from file");
+    // }
+    // }
+
     @Test
     void testReaderEmptyMarketplace() {
         JsonReader reader = new JsonReader("./data/testReaderEmptyMarketplace.json");
         try {
             Marketplace marketplace = reader.read();
-            assertEquals(0, marketplace.getAllProducts().size());
+            assertEquals(0, marketplace.getAllProducts().size(), "Expected an empty marketplace.");
         } catch (IOException e) {
-            fail("Couldn't read from file");
+            fail("Couldn't read from file: " + e.getMessage());
         }
     }
 
@@ -48,11 +59,12 @@ class JsonReaderTest extends JsonTest {
     }
 
     // Helper method to check that the product matches expected values
-    private void checkProduct(String name, String description, String category, double price, String producer, Product product) {
-        assertEquals(name, product.getName());
-        assertEquals(description, product.getDescription());
-        assertEquals(category, product.getCategory());
+    private void checkProduct(String n, String d, String c, double price, String producer, Product product) {
+        assertEquals(n, product.getName());
+        assertEquals(d, product.getDescription());
+        assertEquals(c, product.getCategory());
         assertEquals(price, product.getPrice());
         assertEquals(producer, product.getProducerName());
     }
+
 }

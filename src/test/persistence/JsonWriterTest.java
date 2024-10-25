@@ -1,8 +1,8 @@
-package persistancee;
+package persistence;
 
 import model.Product;
-import persistancee.JsonReader;
-import persistancee.JsonWriter;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 import model.Marketplace;
 import org.junit.jupiter.api.Test;
 

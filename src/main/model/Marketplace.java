@@ -3,9 +3,14 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import persistence.Writable;
+
 
 // Represents a list of products displayed by several producers.
-public class Marketplace {
+public class Marketplace implements Writable {
     private List<Product> products;
 
     // EFFECTS: initializes an empty list of products
@@ -43,4 +48,21 @@ public class Marketplace {
         return result;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("products", productsToJson());
+        return json;
+    }
+
+    // EFFECTS: returns products as a JSON array
+    private JSONArray productsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Product p : products) {
+            jsonArray.put(p.toJson()); 
+        }
+
+        return jsonArray;
+    }
 }

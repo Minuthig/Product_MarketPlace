@@ -1,4 +1,4 @@
-package persistancee;
+package persistence;
 
 import model.Product;
 

@@ -3,8 +3,12 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
+import persistence.Writable;
+
 // Represents a Product with a name, description, category, price and producer name
-public class Product {
+public class Product implements Writable {
     private String name; // name of the product
     private String description; // description of the product
     private String category; // the category (Eg: Clothing, Electronics, Furniture) of the product
@@ -95,5 +99,18 @@ public class Product {
         return "Product: " + name + ", Description: " + description + ", Price: $" + price + ", Category: " + category
                 + ", Producer: " + producerName;
     }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("description", description);
+        json.put("category", category);
+        json.put("price", price);
+        json.put("producerName", producerName);
+        return json;
+    }
+
+    
 
 }

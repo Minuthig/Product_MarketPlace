@@ -5,12 +5,22 @@ import java.util.Scanner;
 import model.Product;
 import model.Marketplace;
 
+import persistence.JsonWriter;
+import persistence.JsonReader;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+
 /**
  * Console-based user interface for the marketplace application.
  */
 public class MarketplaceApp {
+    private static final String JSON_STORE = "./data/marketplace.json";
     private Marketplace marketplace;
     private Scanner scanner;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     /**
      * Initializes the application with a new marketplace and scanner for user
@@ -19,6 +29,8 @@ public class MarketplaceApp {
     public MarketplaceApp() {
         marketplace = new Marketplace();
         scanner = new Scanner(System.in);
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
     }
 
     /**
@@ -42,6 +54,12 @@ public class MarketplaceApp {
                 case 4:
                     removeProduct();
                     break;
+                case 5:
+                    saveMarketplace();
+                    break;
+                case 6:
+                    loadMarketplace();
+                    break;
                 case 0:
                     System.out.println("Thank you for using the marketplace!");
                     running = false;
@@ -60,6 +78,8 @@ public class MarketplaceApp {
         System.out.println("2 - Add a new product");
         System.out.println("3 - Submit Review");
         System.out.println("4 - Remove a product");
+        System.out.println("5 - Save marketplace to file");
+        System.out.println("6 - Load marketplace from file");  
         System.out.println("0 - Exit");
         System.out.print("Select an option: ");
     }
@@ -123,6 +143,26 @@ public class MarketplaceApp {
             System.out.println("Product removed successfully.");
         } else {
             System.out.println("Product not found.");
+        }
+    }
+
+    private void saveMarketplace() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(marketplace);
+            jsonWriter.close();
+            System.out.println("Saved marketplace to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to save to " + JSON_STORE);
+        }
+    }
+
+    private void loadMarketplace() {
+        try {
+            marketplace = jsonReader.read();
+            System.out.println("Loaded marketplace from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to load from " + JSON_STORE);
         }
     }
 }

@@ -70,7 +70,7 @@ public class MarketplaceTest {
     }
     
     @Test
-    void testSearchByNameNoMatch(){
+    void testSearchByNameNoMatch() {
         testMarketplace.addProduct(laptop);
         testMarketplace.addProduct(dress);
 
