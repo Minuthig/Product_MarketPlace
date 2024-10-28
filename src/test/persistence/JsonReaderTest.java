@@ -14,6 +14,7 @@ class JsonReaderTest extends JsonTest {
         JsonReader reader = new JsonReader("./data/noSuchFile.json");
         try {
             Marketplace marketplace = reader.read();
+            assertEquals(0, marketplace.getAllProducts().size());
             fail("IOException expected");
         } catch (IOException e) {
             // pass

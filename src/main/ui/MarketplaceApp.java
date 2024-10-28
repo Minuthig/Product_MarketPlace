@@ -36,6 +36,7 @@ public class MarketplaceApp {
     /**
      * Main method to run the marketplace application.
      */
+    @SuppressWarnings("methodlength")
     public void run() {
         boolean running = true;
         while (running) {
