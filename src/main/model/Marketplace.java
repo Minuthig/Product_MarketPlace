@@ -65,4 +65,15 @@ public class Marketplace implements Writable {
 
         return jsonArray;
     }
+
+    // EFFECTS: Searches for the category entered and returns a list of products matching the category
+    public List<Product> searchByCategory(String category) {
+        List<Product> result = new ArrayList<>();
+        for (Product p : products) {
+            if (p.getCategory().equalsIgnoreCase(category)) {
+            result.add(p);
+        }
+    }
+    return result;
+    }
 }
