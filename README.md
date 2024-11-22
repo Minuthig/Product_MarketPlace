@@ -50,10 +50,10 @@ In a *producer's* point of view;
 - I want to be able to save my product listings, including all details like name, price, description, and reviews, to a file, so I can ensure my items are stored and can be retrieved later if I exit the marketplace.
 - As a producer, I want the application to periodically autosave any changes to my product listings and reviews, so that even if the program crashes or I forget to save manually, my work is protected.
 
-#### Instructions for End User
-- You can add a product to the marketplace by clicking on the "Add Product" button located at the top of the screen.
-- You can remove a product from the marketplace by clicking on the "Remove Product" button located at the top of the screen.
-- You can submit or view reviews of a product by clicking the "Submit/View Review" button and entering your rating and comment. Afterwards, click on the "Submit New Review" button to save your review.
+### Instructions for End User
+- You can add a product to the marketplace by clicking on the **"Add Product"** button located at the top of the screen.
+- You can remove a product from the marketplace by clicking on the **"Remove Product"** button located at the top of the screen.
+- You can submit or view reviews of a product by clicking the **"Submit/View Review"** button and entering your rating and comment. Afterwards, click on the **"Submit New Review"** button to save your review.
 - You can locate my visual component when loading the marketplace.
-- You can save the state of my application by clicking on the "Save Marketplace" button located at the top of the screen.
-- You can reload the state of my application by clicking on the "Load Marketplace" button llocated at the top of the screen.
+- You can save the state of my application by clicking on the **"Save Marketplace"** button located at the top of the screen.
+- You can reload the state of my application by clicking on the **"Load Marketplace"** button llocated at the top of the screen.
