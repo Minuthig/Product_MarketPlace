@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import persistence.Writable;
 
-
 // Represents a list of products displayed by several producers.
 public class Marketplace implements Writable {
     private List<Product> products;
@@ -37,7 +36,8 @@ public class Marketplace implements Writable {
         return new ArrayList<>(products);
     }
 
-    // EFFECTS: Searches for the name entered and returns a list of products matching the name
+    // EFFECTS: Searches for the name entered and returns a list of products
+    // matching the name
     public List<Product> searchByName(String name) {
         List<Product> result = new ArrayList<>();
         for (Product p : products) {
@@ -60,20 +60,21 @@ public class Marketplace implements Writable {
         JSONArray jsonArray = new JSONArray();
 
         for (Product p : products) {
-            jsonArray.put(p.toJson()); 
+            jsonArray.put(p.toJson());
         }
 
         return jsonArray;
     }
 
-    // EFFECTS: Searches for the category entered and returns a list of products matching the category
+    // EFFECTS: Searches for the category entered and returns a list of products
+    // matching the category
     public List<Product> searchByCategory(String category) {
         List<Product> result = new ArrayList<>();
         for (Product p : products) {
             if (p.getCategory().equalsIgnoreCase(category)) {
-            result.add(p);
+                result.add(p);
+            }
         }
-    }
-    return result;
+        return result;
     }
 }
