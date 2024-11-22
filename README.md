@@ -53,6 +53,7 @@ In a *producer's* point of view;
 #### Instructions for End User
 - You can add a product to the marketplace by clicking on the "Add Product" button located at the top of the screen.
 - You can remove a product from the marketplace by clicking on the "Remove Product" button located at the top of the screen.
+- You can submit or view reviews of a product by clicking the "Submit/View Review" button and entering your rating and comment. Afterwards, click on the "Submit New Review" button to save your review.
 - You can locate my visual component when loading the marketplace.
 - You can save the state of my application by clicking on the "Save Marketplace" button located at the top of the screen.
 - You can reload the state of my application by clicking on the "Load Marketplace" button llocated at the top of the screen.
