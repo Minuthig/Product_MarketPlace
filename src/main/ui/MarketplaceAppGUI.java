@@ -2,6 +2,7 @@ package ui;
 
 import model.Marketplace;
 import model.Product;
+import model.Review;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -56,6 +57,10 @@ public class MarketplaceAppGUI extends JFrame {
         removeButton.addActionListener(e -> removeProduct());
         loadButton.addActionListener(e -> loadMarketplace());
         saveButton.addActionListener(e -> saveMarketplace());
+
+        JButton reviewButton = new JButton("Submit/View Review");
+        controlPanel.add(reviewButton);
+        reviewButton.addActionListener(e -> showReviewScreen());
 
         return controlPanel;
     }
@@ -152,6 +157,71 @@ public class MarketplaceAppGUI extends JFrame {
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(this, "Failed to save marketplace.");
         }
+    }
+
+    // EFFECTS: Submits and allows to view a review
+    @SuppressWarnings("methodlength")
+    private void showReviewScreen() {
+        String productName = JOptionPane.showInputDialog(this, "Enter the name of the product for reviews:");
+        List<Product> productsFound = marketplace.searchByName(productName);
+        if (!productsFound.isEmpty()) {
+            Product product = productsFound.get(0); 
+            JDialog reviewDialog = new JDialog(this, "Submit/View Reviews for " + product.getName(), true);
+            reviewDialog.setSize(500, 400);
+            reviewDialog.setLayout(new BorderLayout());
+
+            JPanel submitReviewPanel = new JPanel(new GridLayout(2, 2));
+            JTextField ratingField = new JTextField(10);
+            JTextField commentField = new JTextField(20);
+
+            submitReviewPanel.add(new JLabel("Rating (1-5):"));
+            submitReviewPanel.add(ratingField);
+            submitReviewPanel.add(new JLabel("Comment:"));
+            submitReviewPanel.add(commentField);
+
+            JButton submitReviewButton = new JButton("Submit New Review");
+            submitReviewButton.addActionListener(e -> {
+                try {
+                    int rating = Integer.parseInt(ratingField.getText());
+                    String comment = commentField.getText();
+                    if (rating >= 1 && rating <= 5) {
+                        product.addReview(rating, comment); 
+                        refreshReviewsPanel(product, reviewDialog);
+                        JOptionPane.showMessageDialog(reviewDialog, "Review submitted successfully!");
+                    } else {
+                        JOptionPane.showMessageDialog(reviewDialog, "Rating must be between 1 and 5.");
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(reviewDialog,
+                            "Invalid rating. Please enter a number between 1 and 5.");
+                }
+            });
+            JPanel reviewsPanel = new JPanel();
+            reviewsPanel.setLayout(new BoxLayout(reviewsPanel, BoxLayout.Y_AXIS));
+            JScrollPane scrollPane = new JScrollPane(reviewsPanel);
+            scrollPane.setPreferredSize(new Dimension(280, 200));
+            reviewDialog.add(submitReviewPanel, BorderLayout.NORTH);
+            reviewDialog.add(submitReviewButton, BorderLayout.CENTER);
+            reviewDialog.add(scrollPane, BorderLayout.SOUTH);
+            refreshReviewsPanel(product, reviewDialog);
+            reviewDialog.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Product not found.");
+        }
+    }
+
+    // EFFECTS: Refreshes the reviews panel with existing reviews
+    private void refreshReviewsPanel(Product product, JDialog reviewDialog) {
+        JPanel reviewsPanel = new JPanel();
+        reviewsPanel.setLayout(new BoxLayout(reviewsPanel, BoxLayout.Y_AXIS));
+        for (Review review : product.getReviews()) { 
+            JLabel reviewLabel = new JLabel("Rating: " + review.getRating() + ", Comment: " + review.getComment());
+            reviewsPanel.add(reviewLabel);
+        }
+        JScrollPane scrollPane = (JScrollPane) reviewDialog.getContentPane().getComponent(2);
+        scrollPane.setViewportView(reviewsPanel);
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 
     // EFFECTS: Displays a splash screen with the image on startup
