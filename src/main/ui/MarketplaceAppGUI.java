@@ -46,19 +46,16 @@ public class MarketplaceAppGUI extends JFrame {
         JButton removeButton = new JButton("Remove Product");
         JButton loadButton = new JButton("Load Marketplace");
         JButton saveButton = new JButton("Save Marketplace");
-        // JButton reviewButton = new JButton("Submit Review");
 
         controlPanel.add(addButton);
         controlPanel.add(removeButton);
         controlPanel.add(loadButton);
         controlPanel.add(saveButton);
-        // controlPanel.add(reviewButton);
 
         addButton.addActionListener(e -> addProduct());
         removeButton.addActionListener(e -> removeProduct());
         loadButton.addActionListener(e -> loadMarketplace());
         saveButton.addActionListener(e -> saveMarketplace());
-        // saveButton.addActionListener(e -> submitReview());
 
         return controlPanel;
     }
@@ -72,7 +69,7 @@ public class MarketplaceAppGUI extends JFrame {
         return scrollPane;
     }
 
-    // EFFECTS: Displays all the products in the marketplace
+    // EFFECTS: Displays all products in the marketplace
     private void refreshProductPanel() {
         productPanel.removeAll();
         for (Product product : marketplace.getAllProducts()) {
@@ -156,42 +153,6 @@ public class MarketplaceAppGUI extends JFrame {
             JOptionPane.showMessageDialog(this, "Failed to save marketplace.");
         }
     }
-
-    // // EFFECTS: Method to submit a review for a product
-    // @SuppressWarnings("methodlength")
-    // private void submitReview() {
-    //     String productName = JOptionPane.showInputDialog(this, "Enter the name of the product to review:");
-    //     List<Product> productsFound = marketplace.searchByName(productName);
-    //     if (!productsFound.isEmpty()) {
-    //         Product product = productsFound.get(0);
-    //         JTextField ratingField = new JTextField(10);
-    //         JTextField commentField = new JTextField(10);
-    //         JPanel inputPanel = new JPanel(new GridLayout(2, 2));
-    //         inputPanel.add(new JLabel("Rating (1-5):"));
-    //         inputPanel.add(ratingField);
-    //         inputPanel.add(new JLabel("Comment:"));
-    //         inputPanel.add(commentField);
-    //         int result = JOptionPane.showConfirmDialog(this, inputPanel,
-    //                 "Submit Review", JOptionPane.OK_CANCEL_OPTION);
-    //         if (result == JOptionPane.OK_OPTION) {
-    //             try {
-    //                 int rating = Integer.parseInt(ratingField.getText());
-    //                 String comment = commentField.getText();
-    //                 if (rating >= 1 && rating <= 5) {
-    //                     product.addReview(rating, comment);
-    //                     refreshProductPanel();
-    //                     JOptionPane.showMessageDialog(this, "Review submitted successfully!");
-    //                 } else {
-    //                     JOptionPane.showMessageDialog(this, "Rating must be between 1 and 5.");
-    //                 }
-    //             } catch (NumberFormatException e) {
-    //                 JOptionPane.showMessageDialog(this, "Invalid rating. Please enter a number between 1 and 5.");
-    //             }
-    //         }
-    //     } else {
-    //         JOptionPane.showMessageDialog(this, "Product not found.");
-    //     }
-    // }
 
     // EFFECTS: Displays a splash screen with the image on startup
     private void showSplashScreen() {

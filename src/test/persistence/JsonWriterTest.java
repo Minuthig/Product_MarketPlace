@@ -61,7 +61,7 @@ class JsonWriterTest extends JsonTest {
             fail("Exception should not have been thrown");
         }
     }
-
+    
     // Helper method to check that the product matches expected values
     protected void checkProduct(String n, String d, String c, double price, String producer, Product product) {
         assertEquals(n, product.getName());
