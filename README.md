@@ -57,3 +57,21 @@ In a *producer's* point of view;
 - You can locate my visual component when loading the marketplace.
 - You can save the state of my application by clicking on the **"Save Marketplace"** button located at the top of the screen.
 - You can reload the state of my application by clicking on the **"Load Marketplace"** button llocated at the top of the screen.
+
+
+### Phase 4: Task 2
+**Sample event Log:**
+
+Event Log:
+Fri Nov 29 14:51:51 PST 2024
+Product added: lipstick
+Fri Nov 29 14:51:51 PST 2024
+Product added: super puff jacket
+Fri Nov 29 14:51:51 PST 2024
+Product added: foundation
+Fri Nov 29 14:51:51 PST 2024
+Product added: iphone 15
+Fri Nov 29 14:51:51 PST 2024
+Product added: mouse
+Fri Nov 29 14:51:51 PST 2024
+Product added: hair iron

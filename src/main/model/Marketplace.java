@@ -22,7 +22,7 @@ public class Marketplace implements Writable {
     // EFFECTS: adds a product into the list of products
     public void addProduct(Product product) {
         this.products.add(product);
-        EventLog.getInstance().logEvent(new Event("Product added: "+ product.getName()));
+        EventLog.getInstance().logEvent(new Event("Product added: " + product.getName()));
     }
 
     // REQUIRES: product != null
@@ -30,7 +30,7 @@ public class Marketplace implements Writable {
     // EFFECTS: removes a product into the list of products
     public void removeProduct(Product product) {
         this.products.remove(product);
-        EventLog.getInstance().logEvent(new Event("Product added: "+ product.getName()));
+        EventLog.getInstance().logEvent(new Event("Product added: " + product.getName()));
     }
 
     // EFFECTS: Gets the list of all products.

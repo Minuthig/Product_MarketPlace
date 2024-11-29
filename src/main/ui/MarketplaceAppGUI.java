@@ -1,19 +1,17 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
 import model.Marketplace;
 import model.Product;
 import model.Review;
-// import model.Event;
-// import model.EventLog;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
 import javax.swing.*;
 import java.awt.*;
-// import java.awt.event.WindowAdapter;
-// import java.awt.event.WindowEvent;
-// import java.awt.event.ActionEvent;
-// import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -25,7 +23,7 @@ public class MarketplaceAppGUI extends JFrame {
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
     private JPanel productPanel;
-    // private JComboBox<String> categoryFilter;
+    private JComboBox<String> categoryFilter;
 
     // EFFECTS: Constructor for the GUI application
     public MarketplaceAppGUI() {
@@ -40,16 +38,19 @@ public class MarketplaceAppGUI extends JFrame {
 
         add(createControlPanel(), BorderLayout.NORTH);
         add(createProductPanel(), BorderLayout.CENTER);
+        setJMenuBar(createMenuBar());
 
+        autoLoadMarketplace();
         showSplashScreen();
-        // // Auto-save when closing the application
-        // addWindowListener(new WindowAdapter() {
-        //     @Override
-        //     public void windowClosing(WindowEvent e) {
-        //         autoSaveMarketplace();
-        //         printEventLog();
-        //     }
-        // });
+
+        // Auto-save when closing the application
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                autoSaveMarketplace();
+                printEventLog();
+            }
+        });
     }
 
     // EFFECTS: Creates a control panel with buttons for actions
@@ -59,25 +60,20 @@ public class MarketplaceAppGUI extends JFrame {
 
         JButton addButton = new JButton("Add Product");
         JButton removeButton = new JButton("Remove Product");
-        JButton loadButton = new JButton("Load Marketplace");
-        JButton saveButton = new JButton("Save Marketplace");
+        JButton reviewButton = new JButton("Submit/View Review");
+
+        categoryFilter = new JComboBox<>(new String[] { "All", "Electronics", "Clothing", "Makeup", });
+        categoryFilter.addActionListener(e -> filterProductsByCategory((String) categoryFilter.getSelectedItem()));
 
         controlPanel.add(addButton);
         controlPanel.add(removeButton);
-        controlPanel.add(loadButton);
-        controlPanel.add(saveButton);
+        controlPanel.add(reviewButton);
+        controlPanel.add(new JLabel("Filter by Category:"));
+        controlPanel.add(categoryFilter);
 
         addButton.addActionListener(e -> addProduct());
         removeButton.addActionListener(e -> removeProduct());
-        loadButton.addActionListener(e -> loadMarketplace());
-        saveButton.addActionListener(e -> saveMarketplace());
-
-        JButton reviewButton = new JButton("Submit/View Review");
-        controlPanel.add(reviewButton);
         reviewButton.addActionListener(e -> showReviewScreen());
-
-        // categoryFilter = new JComboBox<>(new String[]{"All", "Electronics", "Clothing", "Books"});
-        // categoryFilter.addActionListener(e -> filterProductsByCategory((String) categoryFilter.getSelectedItem()));
 
         return controlPanel;
     }
@@ -134,7 +130,7 @@ public class MarketplaceAppGUI extends JFrame {
 
             Product product = new Product(name, description, category, price, producer);
             marketplace.addProduct(product);
-            // EventLog.getInstance().logEvent(new Event("Added product: " + name));
+            EventLog.getInstance().logEvent(new Event("Added product: " + name));
             refreshProductPanel();
         }
     }
@@ -147,7 +143,7 @@ public class MarketplaceAppGUI extends JFrame {
         if (!productsFound.isEmpty()) {
             Product productToRemove = productsFound.get(0);
             marketplace.removeProduct(productToRemove);
-            // EventLog.getInstance().logEvent(new Event("Removed product: " + name));
+            EventLog.getInstance().logEvent(new Event("Removed product: " + name));
             refreshProductPanel();
             JOptionPane.showMessageDialog(this, "Product removed successfully.");
         } else {
@@ -155,26 +151,47 @@ public class MarketplaceAppGUI extends JFrame {
         }
     }
 
-    // EFFECTS: Loads the marketplace from a file
-    private void loadMarketplace() {
+    // // EFFECTS: Loads the marketplace from a file
+    // private void loadMarketplace() {
+    // try {
+    // marketplace = jsonReader.read();
+    // refreshProductPanel();
+    // JOptionPane.showMessageDialog(this, "Marketplace loaded successfully.");
+    // } catch (IOException e) {
+    // JOptionPane.showMessageDialog(this, "Failed to load marketplace.");
+    // }
+    // }
+
+    // // EFFECTS: Saves the marketplace to a file
+    // private void saveMarketplace() {
+    // try {
+    // jsonWriter.open();
+    // jsonWriter.write(marketplace);
+    // jsonWriter.close();
+    // JOptionPane.showMessageDialog(this, "Marketplace saved successfully.");
+    // } catch (FileNotFoundException e) {
+    // JOptionPane.showMessageDialog(this, "Failed to save marketplace.");
+    // }
+    // }
+
+    // Automatically loads the marketplace on startup
+    private void autoLoadMarketplace() {
         try {
             marketplace = jsonReader.read();
             refreshProductPanel();
-            JOptionPane.showMessageDialog(this, "Marketplace loaded successfully.");
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Failed to load marketplace.");
+            System.out.println("No saved data found.");
         }
     }
 
-    // EFFECTS: Saves the marketplace to a file
-    private void saveMarketplace() {
+    // Automatically saves the marketplace on exit
+    private void autoSaveMarketplace() {
         try {
             jsonWriter.open();
             jsonWriter.write(marketplace);
             jsonWriter.close();
-            JOptionPane.showMessageDialog(this, "Marketplace saved successfully.");
         } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(this, "Failed to save marketplace.");
+            System.out.println("Failed to save marketplace.");
         }
     }
 
@@ -182,7 +199,7 @@ public class MarketplaceAppGUI extends JFrame {
     private void showReviewScreen() {
         String productName = JOptionPane.showInputDialog(this, "Enter the name of the product for reviews:");
         List<Product> productsFound = marketplace.searchByName(productName);
-    
+
         if (!productsFound.isEmpty()) {
             Product product = productsFound.get(0);
             createReviewDialog(product);
@@ -190,21 +207,23 @@ public class MarketplaceAppGUI extends JFrame {
             JOptionPane.showMessageDialog(this, "Product not found.");
         }
     }
+
     // EFFECTS: Creates the dialog for viewing and submitting a review
+    @SuppressWarnings("method length")
     private void createReviewDialog(Product product) {
         JDialog reviewDialog = new JDialog(this, "Submit/View Reviews for " + product.getName(), true);
         reviewDialog.setSize(500, 400);
         reviewDialog.setLayout(new BorderLayout());
-    
+
         JPanel submitReviewPanel = new JPanel(new GridLayout(2, 2));
         JTextField ratingField = new JTextField(10);
         JTextField commentField = new JTextField(20);
-    
+
         submitReviewPanel.add(new JLabel("Rating (1-5):"));
         submitReviewPanel.add(ratingField);
         submitReviewPanel.add(new JLabel("Comment:"));
         submitReviewPanel.add(commentField);
-    
+
         JButton submitReviewButton = new JButton("Submit New Review");
         submitReviewButton.addActionListener(e -> {
             try {
@@ -222,20 +241,19 @@ public class MarketplaceAppGUI extends JFrame {
                         "Invalid rating. Please enter a number between 1 and 5.");
             }
         });
-    
+
         JPanel reviewsPanel = new JPanel();
         reviewsPanel.setLayout(new BoxLayout(reviewsPanel, BoxLayout.Y_AXIS));
         JScrollPane scrollPane = new JScrollPane(reviewsPanel);
         scrollPane.setPreferredSize(new Dimension(280, 200));
-    
+
         reviewDialog.add(submitReviewPanel, BorderLayout.NORTH);
         reviewDialog.add(submitReviewButton, BorderLayout.CENTER);
         reviewDialog.add(scrollPane, BorderLayout.SOUTH);
-    
+
         refreshReviewsPanel(product, reviewDialog);
         reviewDialog.setVisible(true);
     }
-    
 
     // EFFECTS: Refreshes the reviews panel with existing reviews
     private void refreshReviewsPanel(Product product, JDialog reviewDialog) {
@@ -251,10 +269,45 @@ public class MarketplaceAppGUI extends JFrame {
         scrollPane.repaint();
     }
 
+    // EFFECTS: Filters products by category
+    private void filterProductsByCategory(String category) {
+        productPanel.removeAll();
+        for (Product product : marketplace.getAllProducts()) {
+            if (category.equals("All") || product.getCategory().equalsIgnoreCase(category)) {
+                productPanel.add(new JLabel(product.toString()));
+            }
+        }
+        productPanel.revalidate();
+        productPanel.repaint();
+    }
+
     // EFFECTS: Displays a splash screen with the image on startup
     private void showSplashScreen() {
         JLabel splashLabel = new JLabel(new ImageIcon("StartScreen_Pic.jpeg"));
         JOptionPane.showMessageDialog(this, splashLabel, "Welcome to the Marketplace", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    // Prints the event log
+    private void printEventLog() {
+        System.out.println("Event Log:");
+        for (Event event : EventLog.getInstance()) {
+            System.out.println(event);
+        }
+    }
+
+    // Creates a help menu
+    private JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu helpMenu = new JMenu("Help");
+        JMenuItem howToUseItem = new JMenuItem("How to Use");
+        howToUseItem.addActionListener(e -> JOptionPane.showMessageDialog(this,
+                "1. Add Products: Click 'Add Product'.\n"
+                        + "2. Remove Products: Click 'Remove Product'.\n"
+                        + "3. Submit Reviews: Click 'Submit/View Review'.",
+                "How to Use", JOptionPane.INFORMATION_MESSAGE));
+        helpMenu.add(howToUseItem);
+        menuBar.add(helpMenu);
+        return menuBar;
     }
 
     // Main method to launch the GUI
