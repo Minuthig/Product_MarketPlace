@@ -3,23 +3,29 @@ package ui;
 import model.Marketplace;
 import model.Product;
 import model.Review;
+// import model.Event;
+// import model.EventLog;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
 import javax.swing.*;
 import java.awt.*;
+// import java.awt.event.WindowAdapter;
+// import java.awt.event.WindowEvent;
 // import java.awt.event.ActionEvent;
 // import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+// Method for the GUI application.
 public class MarketplaceAppGUI extends JFrame {
     private static final String JSON_STORE = "./data/marketplace.json";
     private Marketplace marketplace;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
     private JPanel productPanel;
+    // private JComboBox<String> categoryFilter;
 
     // EFFECTS: Constructor for the GUI application
     public MarketplaceAppGUI() {
@@ -36,6 +42,14 @@ public class MarketplaceAppGUI extends JFrame {
         add(createProductPanel(), BorderLayout.CENTER);
 
         showSplashScreen();
+        // // Auto-save when closing the application
+        // addWindowListener(new WindowAdapter() {
+        //     @Override
+        //     public void windowClosing(WindowEvent e) {
+        //         autoSaveMarketplace();
+        //         printEventLog();
+        //     }
+        // });
     }
 
     // EFFECTS: Creates a control panel with buttons for actions
@@ -61,6 +75,9 @@ public class MarketplaceAppGUI extends JFrame {
         JButton reviewButton = new JButton("Submit/View Review");
         controlPanel.add(reviewButton);
         reviewButton.addActionListener(e -> showReviewScreen());
+
+        // categoryFilter = new JComboBox<>(new String[]{"All", "Electronics", "Clothing", "Books"});
+        // categoryFilter.addActionListener(e -> filterProductsByCategory((String) categoryFilter.getSelectedItem()));
 
         return controlPanel;
     }
@@ -117,6 +134,7 @@ public class MarketplaceAppGUI extends JFrame {
 
             Product product = new Product(name, description, category, price, producer);
             marketplace.addProduct(product);
+            // EventLog.getInstance().logEvent(new Event("Added product: " + name));
             refreshProductPanel();
         }
     }
@@ -129,6 +147,7 @@ public class MarketplaceAppGUI extends JFrame {
         if (!productsFound.isEmpty()) {
             Product productToRemove = productsFound.get(0);
             marketplace.removeProduct(productToRemove);
+            // EventLog.getInstance().logEvent(new Event("Removed product: " + name));
             refreshProductPanel();
             JOptionPane.showMessageDialog(this, "Product removed successfully.");
         } else {
@@ -159,62 +178,70 @@ public class MarketplaceAppGUI extends JFrame {
         }
     }
 
-    // EFFECTS: Submits and allows to view a review
-    @SuppressWarnings("methodlength")
+    // EFFECTS: Searches for the product to add the review
     private void showReviewScreen() {
         String productName = JOptionPane.showInputDialog(this, "Enter the name of the product for reviews:");
         List<Product> productsFound = marketplace.searchByName(productName);
+    
         if (!productsFound.isEmpty()) {
-            Product product = productsFound.get(0); 
-            JDialog reviewDialog = new JDialog(this, "Submit/View Reviews for " + product.getName(), true);
-            reviewDialog.setSize(500, 400);
-            reviewDialog.setLayout(new BorderLayout());
-
-            JPanel submitReviewPanel = new JPanel(new GridLayout(2, 2));
-            JTextField ratingField = new JTextField(10);
-            JTextField commentField = new JTextField(20);
-
-            submitReviewPanel.add(new JLabel("Rating (1-5):"));
-            submitReviewPanel.add(ratingField);
-            submitReviewPanel.add(new JLabel("Comment:"));
-            submitReviewPanel.add(commentField);
-
-            JButton submitReviewButton = new JButton("Submit New Review");
-            submitReviewButton.addActionListener(e -> {
-                try {
-                    int rating = Integer.parseInt(ratingField.getText());
-                    String comment = commentField.getText();
-                    if (rating >= 1 && rating <= 5) {
-                        product.addReview(rating, comment); 
-                        refreshReviewsPanel(product, reviewDialog);
-                        JOptionPane.showMessageDialog(reviewDialog, "Review submitted successfully!");
-                    } else {
-                        JOptionPane.showMessageDialog(reviewDialog, "Rating must be between 1 and 5.");
-                    }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(reviewDialog,
-                            "Invalid rating. Please enter a number between 1 and 5.");
-                }
-            });
-            JPanel reviewsPanel = new JPanel();
-            reviewsPanel.setLayout(new BoxLayout(reviewsPanel, BoxLayout.Y_AXIS));
-            JScrollPane scrollPane = new JScrollPane(reviewsPanel);
-            scrollPane.setPreferredSize(new Dimension(280, 200));
-            reviewDialog.add(submitReviewPanel, BorderLayout.NORTH);
-            reviewDialog.add(submitReviewButton, BorderLayout.CENTER);
-            reviewDialog.add(scrollPane, BorderLayout.SOUTH);
-            refreshReviewsPanel(product, reviewDialog);
-            reviewDialog.setVisible(true);
+            Product product = productsFound.get(0);
+            createReviewDialog(product);
         } else {
             JOptionPane.showMessageDialog(this, "Product not found.");
         }
     }
+    // EFFECTS: Creates the dialog for viewing and submitting a review
+    private void createReviewDialog(Product product) {
+        JDialog reviewDialog = new JDialog(this, "Submit/View Reviews for " + product.getName(), true);
+        reviewDialog.setSize(500, 400);
+        reviewDialog.setLayout(new BorderLayout());
+    
+        JPanel submitReviewPanel = new JPanel(new GridLayout(2, 2));
+        JTextField ratingField = new JTextField(10);
+        JTextField commentField = new JTextField(20);
+    
+        submitReviewPanel.add(new JLabel("Rating (1-5):"));
+        submitReviewPanel.add(ratingField);
+        submitReviewPanel.add(new JLabel("Comment:"));
+        submitReviewPanel.add(commentField);
+    
+        JButton submitReviewButton = new JButton("Submit New Review");
+        submitReviewButton.addActionListener(e -> {
+            try {
+                int rating = Integer.parseInt(ratingField.getText());
+                String comment = commentField.getText();
+                if (rating >= 1 && rating <= 5) {
+                    product.addReview(rating, comment);
+                    refreshReviewsPanel(product, reviewDialog);
+                    JOptionPane.showMessageDialog(reviewDialog, "Review submitted successfully!");
+                } else {
+                    JOptionPane.showMessageDialog(reviewDialog, "Rating must be between 1 and 5.");
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(reviewDialog,
+                        "Invalid rating. Please enter a number between 1 and 5.");
+            }
+        });
+    
+        JPanel reviewsPanel = new JPanel();
+        reviewsPanel.setLayout(new BoxLayout(reviewsPanel, BoxLayout.Y_AXIS));
+        JScrollPane scrollPane = new JScrollPane(reviewsPanel);
+        scrollPane.setPreferredSize(new Dimension(280, 200));
+    
+        reviewDialog.add(submitReviewPanel, BorderLayout.NORTH);
+        reviewDialog.add(submitReviewButton, BorderLayout.CENTER);
+        reviewDialog.add(scrollPane, BorderLayout.SOUTH);
+    
+        refreshReviewsPanel(product, reviewDialog);
+        reviewDialog.setVisible(true);
+    }
+    
 
     // EFFECTS: Refreshes the reviews panel with existing reviews
     private void refreshReviewsPanel(Product product, JDialog reviewDialog) {
         JPanel reviewsPanel = new JPanel();
         reviewsPanel.setLayout(new BoxLayout(reviewsPanel, BoxLayout.Y_AXIS));
-        for (Review review : product.getReviews()) { 
+        for (Review review : product.getReviews()) {
             JLabel reviewLabel = new JLabel("Rating: " + review.getRating() + ", Comment: " + review.getComment());
             reviewsPanel.add(reviewLabel);
         }
